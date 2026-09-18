@@ -1,6 +1,5 @@
 ﻿using TwitterCloneApi.Data;
 using TwitterCloneApi.Dtos;
-using TwitterCloneApi.DTOs;
 using TwitterCloneApi.Entites;
 
 namespace TwitterCloneApi.Services;
@@ -61,14 +60,51 @@ public class UserService
 
         return user;
     }
-    public User? Login(LoginDto dto)
+    public LoginUserDto? Login(LoginDto dto)
     {
-        var user = _context.Users.
-            FirstOrDefault(u =>
-               u.UserId == dto.UserId &&
-               u.Password == dto.Password);
+        var user = _context.Users
+            .FirstOrDefault(u =>
+                u.UserId == dto.UserId &&
+                u.Password == dto.Password);
 
-        return user;
+        if (user == null)
+        {
+            return null;
+        }
+
+        return new LoginUserDto
+        {
+            Id = user.Id,
+            UserId = user.UserId,
+            Name = user.Name
+        };
+    }
+
+    //Search Users By name 
+    public List<User> SearchUsers(string name)
+    {
+        return _context.Users
+            .Where(u => u.Name.Contains(name))
+            .ToList();
+    }
+
+    //Profile information 
+    public UserProfileDto? GetUserByUserId(string userId)
+    {
+        var user = _context.Users
+            .FirstOrDefault(u => u.UserId == userId);
+
+        if (user == null)
+        {
+            return null;
+        }
+
+        return new UserProfileDto
+        {
+            Id = user.Id,
+            UserId = user.UserId,
+            Name = user.Name
+        };
     }
 }
 

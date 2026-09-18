@@ -1,6 +1,4 @@
-﻿
-using TwitterCloneApi.Dtos;
-using TwitterCloneApi.DTOs;
+﻿using TwitterCloneApi.Dtos;
 using TwitterCloneApi.Services;
 
 namespace TwitterCloneApi.Endpoints;
@@ -35,7 +33,7 @@ public static class UserEndpoints
         // Login Endpoint
         app.MapPost("/api/users/login", (LoginDto dto, UserService UserService) =>
         {
-            var user = UserService.Login(dto);
+            LoginUserDto? user = UserService.Login(dto);
 
             if (user == null)
             {
@@ -44,5 +42,33 @@ public static class UserEndpoints
             return Results.Ok(user);
 
         });
+
+        // Search Endpoint
+        app.MapGet("/api/users/search",
+    (string name, UserService userService) =>
+    {
+        var users = userService.SearchUsers(name);
+        if (users.Count == 0)
+        {
+            return Results.NotFound("User not found.");
+        }
+
+
+        return Results.Ok(users);
+    });
+
+        // Profile endpoint 
+        app.MapGet("/api/users/{userId}",
+    (string userId, UserService userService) =>
+    {
+        var user = userService.GetUserByUserId(userId);
+
+        if (user == null)
+        {
+            return Results.NotFound("User not found.");
+        }
+
+        return Results.Ok(user);
+    });
     }
 }

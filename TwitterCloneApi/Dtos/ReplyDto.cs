@@ -1,6 +1,6 @@
 ﻿namespace TwitterCloneApi.Dtos
 {
-    public class CreateTweetDto
+    public class ReplyDto
     {
         public string Content { get; set; } = "";
     }

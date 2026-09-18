@@ -1,4 +1,4 @@
-﻿namespace TwitterCloneApi.DTOs;
+﻿namespace TwitterCloneApi.Dtos;
 
 public class RegisterDto
 {
